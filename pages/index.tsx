@@ -1,5 +1,6 @@
 import type { GetServerSideProps, NextPage } from "next";
-import ThemeSwitch from "../components/themeSwitch";
+import Navbar from "../components/navbar";
+import Shopcards from "../components/shopcards";
 import { supabase } from "../utils/supabase";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -7,26 +8,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 const Home: NextPage = () => {
-  async function signInWithGoogle() {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: "google",
-    });
-  }
   return (
-    <div className="flex flex-col p-6">
-      <h2 className="text-5xl font-bold mb-8 dark:text-gray-100">
-        barber shops or clients welcome
-      </h2>
-
-      <button
-        onClick={signInWithGoogle}
-        className="bg-gray-900 focus:outline-none focus:bg-slate-600 hover:bg-slate-600  rounded-lg font-medium text-white p-3 px-6 capitalize mb-2"
-        disabled={!!supabase.auth.user()}
-      >
-        get started
-      </button>
-      <ThemeSwitch />
-      {supabase.auth.user() && supabase.auth.user()?.email}
+    <div>
+      <Navbar />
+      <main className="flex flex-col p-2">
+        <h2 className="text-5xl font-bold mt-8 dark:text-gray-100">
+          barber shops or clients welcome
+        </h2>
+        <h2 className="text-2xl font-bold mt-8 dark:text-gray-100">
+          barber shops or clients welcome
+        </h2>
+        <Shopcards />
+      </main>
     </div>
   );
 };
