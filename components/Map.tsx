@@ -1,56 +1,70 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MapGl, { Layer, Source } from "react-map-gl";
 
 type Props = {};
 
 function Map({}: Props) {
-  const geojson = {
-    type: "Feature",
-    geometry: { type: "Point", coordinates: [0, -122.4, 37.8] },
-    id: "point",
-    properties: {},
-  };
+  const [points, setPoints] = useState<mapboxgl.Point[]>([]);
+  const [viewState, setViewState] = useState({
+    longitude: 2,
+    latitude: 36,
+    zoom: 10,
+  });
 
   const handleClick = useCallback((evt: mapboxgl.MapLayerMouseEvent) => {
-    console.log(evt.point);
+    console.log("clicked", evt.point);
+    setPoints((prev) => {
+      prev.push(evt.point);
+      return prev;
+    });
   }, []);
 
-  const layerStyle = {
-    id: "point",
-    type: "circle",
-    paint: {
-      "circle-radius": 10,
-      "circle-color": "#007cbf",
-    },
-  };
+  useEffect(() => {
+    const getLocation = () => {
+      navigator.geolocation.getCurrentPosition((data) => {
+        setViewState((prev) => {
+          return {
+            ...prev,
+            latitude: data.coords.latitude,
+            longitude: data.coords.longitude,
+          };
+        });
+      });
+    };
+    getLocation();
+  }, []);
+
+  const onMove = useCallback(({ viewState }) => {
+    setViewState(viewState);
+  }, []);
 
   return (
     <MapGl
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPGL_SK}
       onClick={handleClick}
-      initialViewState={{
-        longitude: -122.4,
-        latitude: 37.8,
-        zoom: 14,
-      }}
+      {...viewState}
       style={{ width: 600, height: 400 }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
+      onMove={onMove}
     >
-      <Source
-        id="my-data"
-        type="geojson"
-        data={{
-          type: "Feature",
-          geometry: { type: "Point", coordinates: [0, -122.4, 37.8] },
-          properties: { layerStyle },
-        }}
-      >
-        <Layer
-          id="point"
-          type="circle"
-          paint={{ "circle-color": "red", "circle-radius": 10 }}
-        />
-      </Source>
+      {points.map((point, _id) => (
+        <Source
+          id="my-data"
+          type="geojson"
+          key={_id}
+          data={{
+            type: "Feature",
+            geometry: { type: "Point", coordinates: [point.x, point.y] },
+            properties: {},
+          }}
+        >
+          <Layer
+            id="point"
+            type="circle"
+            paint={{ "circle-color": "red", "circle-radius": 10 }}
+          />
+        </Source>
+      ))}
     </MapGl>
   );
 }

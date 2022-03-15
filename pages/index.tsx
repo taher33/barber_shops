@@ -9,11 +9,6 @@ const Map = dynamic(() => import("../components/Map"), {
 });
 
 const Home: NextPage = () => {
-  const getLocation = () => {
-    navigator.geolocation.getCurrentPosition((data) => {
-      console.log(data);
-    });
-  };
   return (
     <div>
       <Navbar />
@@ -23,7 +18,6 @@ const Home: NextPage = () => {
           barber shops or clients welcome
         </h2>
         <Shopcards />
-        <Button onClickFn={getLocation}>get location</Button>
         <Map />
       </main>
     </div>
