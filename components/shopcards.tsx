@@ -11,9 +11,7 @@ const Shopcards: NextPage<Props> = () => {
         <div
           onClick={() => router.push(`/shop/${el}`)}
           key={el}
-          className={`
-          w-52 h-64 bg-cover mr-4 text-white cursor-pointer bg-center bg-no-repeat shadow-sm rounded-lg bg-[url("/barber${el}.jpg")]     
-          `}
+          className={`w-52 h-64 bg-cover mr-4 text-white cursor-pointer bg-center bg-no-repeat shadow-sm rounded-lg bg-[url(/barber${el}.jpg)]`}
         >
           <div className="bg-gradient-to-t p-2 from-black   pt-44 w-full h-full rounded-lg">
             <h3 className="capitalize font-semibold">james carter</h3>

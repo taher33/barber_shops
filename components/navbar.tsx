@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import ThemeSwitch from "../components/themeSwitch";
 import { supabase } from "../utils/supabase";
+import Button from "./Button";
 
 interface Props {}
 
@@ -10,22 +11,21 @@ const Navbar: NextPage<Props> = () => {
       provider: "google",
     });
   }
+  async function signOut() {
+    supabase.auth.signOut();
+  }
 
   return (
     <div className="w-full dark:bg-slate-900 sticky bg-gray-50 p-2 flex justify-end items-center ">
       <ThemeSwitch />
-      {supabase.auth.user() && (
-        <>
-          {supabase.auth.user()?.email}
-          <button
-            onClick={signInWithGoogle}
-            className="bg-gray-900 disabled:bg-gray-300 focus:outline-none focus:bg-slate-600 hover:bg-slate-600  rounded-lg font-medium text-white px-5 py-2  capitalize "
-            disabled={!!supabase.auth.user()}
-          >
-            login
-          </button>
-        </>
-      )}
+      <>{supabase.auth.user() && supabase.auth.user()?.email}</>
+      <Button onClickFn={signInWithGoogle} disable={!!supabase.auth.user()}>
+        login
+      </Button>
+
+      <Button onClickFn={signOut} disable={!supabase.auth.user()}>
+        sign out
+      </Button>
     </div>
   );
 };

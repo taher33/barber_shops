@@ -8,8 +8,8 @@ const Shops: NextPage<Props> = ({ data }) => {
   return (
     <div>
       <h2>welcome to my shop</h2>
-      <p>{data.name} </p>
-      <p>{data.rating} </p>
+      <p>{data?.name} </p>
+      <p>{data?.rating} </p>
     </div>
   );
 };
@@ -35,7 +35,7 @@ const shopData = [
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      data: shopData[parseInt(context.params?.id as string)],
+      data: shopData[parseInt(context.params?.id as string) - 1] || null,
     },
   };
 };
