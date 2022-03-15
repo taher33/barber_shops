@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import MapGl, { Layer, Source } from "react-map-gl";
+import MapGl, { Layer, Marker, Popup, Source } from "react-map-gl";
+import { BiCurrentLocation } from "react-icons/bi";
+import mapboxgl from "mapbox-gl";
 
 type Props = {};
 
 function Map({}: Props) {
   const [points, setPoints] = useState<mapboxgl.Point[]>([]);
   const [viewState, setViewState] = useState({
-    longitude: 2,
+    longitude: 12,
     latitude: 36,
     zoom: 10,
   });
@@ -47,23 +49,42 @@ function Map({}: Props) {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       onMove={onMove}
     >
-      {points.map((point, _id) => (
-        <Source
-          id="my-data"
-          type="geojson"
-          key={_id}
-          data={{
-            type: "Feature",
-            geometry: { type: "Point", coordinates: [point.x, point.y] },
-            properties: {},
-          }}
-        >
-          <Layer
-            id="point"
-            type="circle"
-            paint={{ "circle-color": "red", "circle-radius": 10 }}
-          />
-        </Source>
+      {[
+        [12, 20],
+        [12, 21],
+      ].map((point, id) => (
+        <div key={id}>
+          <Popup
+            closeOnClick={false}
+            onOpen={(evt) =>
+              setViewState((prev) => {
+                return {
+                  ...prev,
+                  latitude: evt.target.options.latitude,
+                  longitude: evt.target.options.longitude,
+                };
+              })
+            }
+            onClose={(evt) => console.log("close", evt)}
+            latitude={point[0]}
+            longitude={point[1]}
+            offset={{
+              "bottom-left": [12, -38],
+              bottom: [0, -38],
+              "bottom-right": [-12, -38],
+            }}
+          >
+            <h1 className="text-color-red">hello there</h1>
+          </Popup>
+          <Marker
+            color="red"
+            scale={2}
+            longitude={point[0]}
+            latitude={point[1]}
+          >
+            <BiCurrentLocation style={{ color: "red" }} />
+          </Marker>
+        </div>
       ))}
     </MapGl>
   );
