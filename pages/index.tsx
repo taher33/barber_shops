@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
+import { useState } from "react";
+import AddShop from "../components/AddShop";
 import Button from "../components/Button";
 import Navbar from "../components/navbar";
 import Shopcards from "../components/shopcards";
@@ -9,6 +11,10 @@ const Map = dynamic(() => import("../components/Map"), {
 });
 
 const Home: NextPage = () => {
+  const [points, setPoints] = useState([
+    [12, 20],
+    [12, 21],
+  ]);
   return (
     <div>
       <Navbar />
@@ -18,7 +24,8 @@ const Home: NextPage = () => {
           barber shops or clients welcome
         </h2>
         <Shopcards />
-        <Map />
+        <AddShop setPoints={setPoints} />
+        <Map points={points} />
       </main>
     </div>
   );

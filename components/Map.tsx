@@ -3,10 +3,11 @@ import MapGl, { Layer, Marker, Popup, Source } from "react-map-gl";
 import { BiCurrentLocation } from "react-icons/bi";
 import mapboxgl from "mapbox-gl";
 
-type Props = {};
+type Props = {
+  points: number[][];
+};
 
-function Map({}: Props) {
-  const [points, setPoints] = useState<mapboxgl.Point[]>([]);
+function Map({ points }: Props) {
   const [viewState, setViewState] = useState({
     longitude: 12,
     latitude: 36,
@@ -14,11 +15,7 @@ function Map({}: Props) {
   });
 
   const handleClick = useCallback((evt: mapboxgl.MapLayerMouseEvent) => {
-    console.log("clicked", evt.point);
-    setPoints((prev) => {
-      prev.push(evt.point);
-      return prev;
-    });
+    console.log("clicked", evt.lngLat);
   }, []);
 
   useEffect(() => {
@@ -49,22 +46,19 @@ function Map({}: Props) {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       onMove={onMove}
     >
-      {[
-        [12, 20],
-        [12, 21],
-      ].map((point, id) => (
+      {points.map((point, id) => (
         <div key={id}>
           <Popup
             closeOnClick={false}
-            onOpen={(evt) =>
-              setViewState((prev) => {
-                return {
-                  ...prev,
-                  latitude: evt.target.options.latitude,
-                  longitude: evt.target.options.longitude,
-                };
-              })
-            }
+            // onOpen={(evt) =>
+            //   setViewState((prev) => {
+            //     return {
+            //       ...prev,
+            //       latitude: evt.target.options.latitude,
+            //       longitude: evt.target.options.longitude,
+            //     };
+            //   })
+            // }
             onClose={(evt) => console.log("close", evt)}
             latitude={point[0]}
             longitude={point[1]}
