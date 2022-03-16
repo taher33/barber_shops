@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import AddShop from "../components/AddShop";
-import Button from "../components/Button";
 import Navbar from "../components/navbar";
 import Shopcards from "../components/shopcards";
 
