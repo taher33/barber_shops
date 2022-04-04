@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import MapGl, { Layer, Marker, Popup, Source } from "react-map-gl";
 import { BiCurrentLocation } from "react-icons/bi";
 import mapboxgl from "mapbox-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 
 type Props = {
   points: number[][];
@@ -12,6 +13,11 @@ function Map({ points }: Props) {
     longitude: 12,
     latitude: 36,
     zoom: 14,
+  });
+
+  const mapRef = useRef(null);
+  const geocoder = new MapboxGeocoder({
+    accessToken: process.env.NEXT_PUBLIC_MAPGL_SK || "",
   });
 
   const handleClick = useCallback((evt: mapboxgl.MapLayerMouseEvent) => {
@@ -39,6 +45,7 @@ function Map({ points }: Props) {
 
   return (
     <MapGl
+      ref={mapRef}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPGL_SK}
       onClick={handleClick}
       {...viewState}
