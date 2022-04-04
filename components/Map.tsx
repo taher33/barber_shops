@@ -11,7 +11,7 @@ function Map({ points }: Props) {
   const [viewState, setViewState] = useState({
     longitude: 12,
     latitude: 36,
-    zoom: 10,
+    zoom: 14,
   });
 
   const handleClick = useCallback((evt: mapboxgl.MapLayerMouseEvent) => {
@@ -42,7 +42,7 @@ function Map({ points }: Props) {
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPGL_SK}
       onClick={handleClick}
       {...viewState}
-      style={{ width: 600, height: 400 }}
+      style={{ width: 600, height: 400, border: "solid black 1px" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       onMove={onMove}
     >
@@ -59,7 +59,7 @@ function Map({ points }: Props) {
             //     };
             //   })
             // }
-            onClose={(evt) => console.log("close", evt)}
+
             latitude={point[0]}
             longitude={point[1]}
             offset={{
@@ -68,7 +68,7 @@ function Map({ points }: Props) {
               "bottom-right": [-12, -38],
             }}
           >
-            <h1 className="text-color-red">hello there</h1>
+            <h1 className="text-color-red">shop {id}</h1>
           </Popup>
           <Marker
             color="red"

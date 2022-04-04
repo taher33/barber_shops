@@ -30,7 +30,7 @@ function AddShop({ setPoints }: Props) {
     <>
       <MyModal
         data={{
-          action: "allow the app access to my location",
+          action: "I understand",
           body: "sorry but for this we must use your current loaction to put your shop on the map",
           header: "location is needed",
         }}
